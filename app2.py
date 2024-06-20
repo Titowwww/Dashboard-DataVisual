@@ -81,9 +81,10 @@ if page == 'ADVENTURE WORKS':
             width=800
         )
         st.altair_chart(bar_chart, use_container_width=True)
-        st.write("""Grafik Barchart ini menampilkan jumlah penjualan dari setiap subcategory produk. Dimana sumbu X menunjukkan Product SubCategory dan Sumbu Y
-                 menunjukkan Sales Amount. Grafik ini dapat membantu mengetahui penjualan dari tiap product subcategory yang dimana perusahaan dapat
-                 membuat keputusan dalam melakukan produksi dan penjualan""")
+        st.write("""Grafik bar chart di atas menampilkan jumlah penjualan dari setiap subkategori produk di Adventure Works. Sumbu X menunjukkan berbagai subkategori produk, 
+                 sedangkan sumbu Y menunjukkan total penjualan (Sales Amount) dalam angka. """)
+        st.write("""Pengetahuan ini sangat penting bagi perusahaan dalam mengambil keputusan strategis terkait produksi dan penjualan. Dengan memahami subkategori produk yang memiliki penjualan tinggi, 
+                 perusahaan dapat fokus pada peningkatan produksi dan strategi pemasaran. Sebaliknya, untuk subkategori dengan penjualan rendah, perusahaan dapat mengevaluasi kembali strategi mereka atau mempertimbangkan inovasi produk untuk meningkatkan penjualan.""")
         
     # RELATIONSHIP
     st.header("Relationship between Standard Cost and List Price🔗")
@@ -101,8 +102,9 @@ if page == 'ADVENTURE WORKS':
             height=400
         )
         st.altair_chart(scatter_chart, use_container_width=True)
-        st.write("""Grafik Scatter plot ini menampilkan kondisi relasi atau hubungan antara 2 variabel. Dimana sumbu X menunjukkan Standard Cost atau Biaya Produksi dan sumbu Y menunjukkan
-                 List Price atau harga jual. Grafik ini membantu organisasi dalama memahami relasi antara 2 variabel apakah berkorelasi negatif atau positif""")
+        st.write("""Grafik scatter plot di atas menampilkan hubungan antara dua variabel penting: Standard Cost (biaya produksi) dan List Price (harga jual). Sumbu X merepresentasikan Standard Cost, sedangkan sumbu Y merepresentasikan List Price.
+                Dari visualisasi ini, kita dapat mengamati adanya hubungan positif antara Standard Cost dan List Price. Artinya, ketika biaya produksi meningkat, harga jual juga cenderung meningkat. Titik-titik data yang tersebar di grafik menunjukkan bahwa ada korelasi yang cukup kuat antara kedua variabel ini.""")
+        st.write("""Grafik ini sangat berguna bagi organisasi untuk memahami dinamika antara biaya produksi dan harga jual. Dengan pemahaman ini, perusahaan dapat lebih baik dalam menentukan strategi penetapan harga yang optimal. Selain itu, memahami hubungan ini juga membantu dalam pengambilan keputusan terkait pengendalian biaya dan strategi pemasaran.""")
 
     # COMPOSITION
     st.header("Sales of Subcategory by Region📌")
@@ -179,7 +181,11 @@ if page == 'ADVENTURE WORKS':
 
         # Menampilkan bar chart di Streamlit
         st.plotly_chart(fig, use_container_width=True)
-        st.write("""Grafik Barchart ini menampilkan distribusi usia karyawan. Dimana sumbu X menunjukkan Rentang Usia Karyawan dan sumbu Y menunjukkan Jumlah dari tiap Rentang Usia Karyawan""")
+        st.write("""Grafik bar chart di atas menampilkan distribusi usia karyawan di perusahaan. Sumbu X menunjukkan rentang usia karyawan, 
+                 sedangkan sumbu Y menunjukkan jumlah karyawan dalam setiap rentang usia tersebut.""")
+        st.write("""Pemahaman tentang distribusi usia karyawan ini sangat penting bagi perusahaan dalam berbagai aspek, 
+                 seperti perencanaan tenaga kerja, pengembangan karir, dan program pelatihan. Mengetahui bahwa mayoritas karyawan berada dalam kelompok usia tertentu dapat membantu 
+                 perusahaan menyesuaikan kebijakan dan program yang sesuai dengan kebutuhan spesifik dari kelompok usia tersebut.""")
 
 elif page == 'IMDB TOP 50 MOVIES':
     st.title("IMDB TOP 50 MOVIES🎥")
@@ -220,8 +226,8 @@ elif page == 'IMDB TOP 50 MOVIES':
     fig = px.bar(df_plot, x='Title', y='Gross worldwide', color='Title', color_discrete_sequence=px.colors.sequential.Plotly3, title='Gross Worldwide by Year')
     st.plotly_chart(fig, use_container_width=True)
     st.write("""Grafik Barchart ini menampilkan Gross Worldwide dari 50 film teratas. Sumbu X menunjukkan Judul Film dan sumbu Y menunjukkan Gross Worldwide.
-             Grafik ini dapat di filter berdasarkan tahun rilis film. Dengan adanya grafik ini, dapat membantu dalam mengetahui pendapatan kotor dari tiap film sesuai
-             dengan rentang waktu rilisnya""")
+             Grafik ini dapat di filter berdasarkan tahun rilis film. Secara keseluruhan, visualisasi secara efektif menyajikan pendapatan kotor di seluruh dunia dari 50 film IMDb teratas,
+              menawarkan gambaran singkat tentang film-film yang paling sukses secara komersial.""")
 
     # DISTRIBUTION
     st.header("Distribution of Aspect Ratio🎞️")
@@ -238,15 +244,15 @@ elif page == 'IMDB TOP 50 MOVIES':
     )
     # Menampilkan bar chart di Streamlit
     st.altair_chart(bar_chart, use_container_width=True)
-    st.write("""Grafik Barchart ini menampilkan distribusi penggunaan Aspek Ratio dalam film. Grafik ini dapat membantu dalam mengetahui
-             aspek rasio apa yang paling umum digunakan dalam sebuah film""")
+    st.write("""Grafik Barchart ini menampilkan distribusi penggunaan Aspek Ratio dalam film. 
+             Memahami distribusi aspek rasio dalam film dapat membantu pembuat film atau produsen film memilih aspek rasio yang tepat untuk menyampaikan cerita mereka secara efektif.""")
 
     #RELATIONSHIP
     st.header("Relationship between Budget and Gross Worldwide🪙")
     fig = px.scatter(data2, x='Budget', y='Gross worldwide')
     st.plotly_chart(fig, use_container_width=True)
-    st.write("""Grafik Scatter Plot ini menampilkan relasi atau hubungan antara Budget dan Runtime. Dengan adanya grafik ini, dapat membantu dalam
-             mengetahui apakah budget pembuatan film mempengaruhi durasi dari sebuah film""")
+    st.write("""Grafik Scatter Plot ini menampilkan relasi atau hubungan antara Budget dan Runtime. Visualisasi ini menunjukkan bahwa budget produksi film bukanlah penentu tunggal kesuksesan finansial. 
+             Faktor-faktor lain juga berperan penting dalam menentukan pendapatan kotor film.""")
 
     # COMPOSITION
     st.header("Composition of Color🎨")
@@ -257,5 +263,5 @@ elif page == 'IMDB TOP 50 MOVIES':
     fig = px.pie(color_counts, names='Color', values='Frequency')
     # Menampilkan pie chart di Streamlit
     st.plotly_chart(fig, use_container_width=True)
-    st.write("""Grafik Pie Chart ini menampilkan komposisi dari penggunaan warna pada sebuah film. Dari grafik ini, dapat membantu kita 
-             dalam mengetahui warna apa yang paling umum atau general dalam membuat sebuah film""")
+    st.write("""Grafik Pie Chart ini menampilkan komposisi dari penggunaan warna pada sebuah film. Dari grafik ini,
+              menunjukkan dominasi film berwarna dalam industri perfilman. Namun, film hitam putih masih memiliki perannya tersendiri. Pemilihan warna merupakan keputusan kreatif yang dapat memengaruhi gaya dan pesan yang ingin disampaikan oleh film.""")
