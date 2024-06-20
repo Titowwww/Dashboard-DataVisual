@@ -7,6 +7,7 @@ import pymysql
 import plotly.express as px
 from datetime import datetime
 
+# create connection ke db
 def create_connection():
     host = "kubela.id"
     port = 3306
@@ -42,16 +43,16 @@ def fetch_data(query):
         connection.close()
 
 # membaca file csv
-file_path = 'imdb_top250_50movies.csv'
+file_path = 'C:/Users/USER/Documents/COLLage/Assignment/DATA VISUAL/FP/imdb_top250_50movies.csv'
 data2 = pd.read_csv(file_path)
 
 page = st.sidebar.selectbox('Select Page', ['ADVENTURE WORKS', 'IMDB TOP 50 MOVIES'])
 
 if page == 'ADVENTURE WORKS':
-    st.title('Adventure Works Dashboard')
+    st.title('Adventure Works Dashboard🚲')
 
     # COMPARISON
-    st.header("Sales by Subcategory")
+    st.header("Sales by Subcategory💹")
     # SQL queries
     dimproduct_query = 'SELECT ProductSubCategoryKey, ProductKey FROM dimproduct'
     dimproductsubcategory_query = 'SELECT EnglishProductSubCategoryName, ProductSubCategoryKey FROM dimproductsubcategory'
@@ -77,13 +78,15 @@ if page == 'ADVENTURE WORKS':
             y=alt.Y('SalesAmount', title='Sales Amount'),
             color=alt.Color('EnglishProductSubCategoryName', legend=None)  # Menambahkan warna untuk setiap bar
         ).properties(
-            title='Sales by Subcategory',
             width=800
         )
         st.altair_chart(bar_chart, use_container_width=True)
-
+        st.write("""Grafik Barchart ini menampilkan jumlah penjualan dari setiap subcategory produk. Dimana sumbu X menunjukkan Product SubCategory dan Sumbu Y
+                 menunjukkan Sales Amount. Grafik ini dapat membantu mengetahui penjualan dari tiap product subcategory yang dimana perusahaan dapat
+                 membuat keputusan dalam melakukan produksi dan penjualan""")
+        
     # RELATIONSHIP
-    st.header("Relationship between Standard Cost and List Price")
+    st.header("Relationship between Standard Cost and List Price🔗")
     dimproduct_query = 'SELECT StandardCost, ListPrice FROM dimproduct'
     df = fetch_data(dimproduct_query)
 
@@ -94,14 +97,15 @@ if page == 'ADVENTURE WORKS':
             x=alt.X('StandardCost', title='Standard Cost'),
             y=alt.Y('ListPrice', title='List Price')
         ).properties(
-            title='Relationship between Standard Cost and List Price',
             width=800,
             height=400
         )
         st.altair_chart(scatter_chart, use_container_width=True)
+        st.write("""Grafik Scatter plot ini menampilkan kondisi relasi atau hubungan antara 2 variabel. Dimana sumbu X menunjukkan Standard Cost atau Biaya Produksi dan sumbu Y menunjukkan
+                 List Price atau harga jual. Grafik ini membantu organisasi dalama memahami relasi antara 2 variabel apakah berkorelasi negatif atau positif""")
 
     # COMPOSITION
-    st.header("Sales of Subcategory by Region")
+    st.header("Sales of Subcategory by Region📌")
 
     # Queries to fetch data from tables
     dimsalesterritory_query = 'SELECT SalesTerritoryRegion, SalesTerritoryKey FROM dimsalesterritory'
@@ -132,10 +136,19 @@ if page == 'ADVENTURE WORKS':
 
         # Filtering data berdasarkan region yang dipilih
         filtered_data = df[df['SalesTerritoryRegion'] == selected_region]
-        st.bar_chart(filtered_data.groupby('EnglishProductSubCategoryName')['SalesAmount'].sum())
+        #st.bar_chart(filtered_data.groupby('EnglishProductSubCategoryName')['SalesAmount'].sum())
+        grouped_data = filtered_data.groupby(['EnglishProductSubCategoryName', 'SalesTerritoryRegion'])['SalesAmount'].sum().reset_index()
+
+        fig = px.treemap(grouped_data, path=['SalesTerritoryRegion', 'EnglishProductSubCategoryName'], values='SalesAmount',
+                     color='SalesAmount', color_continuous_scale='Blues')
+
+        # Menampilkan treemap di Streamlit
+        st.plotly_chart(fig)
+        st.write("""Grafik Treemap ini menunjukkan pemetaan penjualan tiap produk subcategory dari sebuah region. Region dapat dipilih melalui dropdown yang disediakan.
+                 Dengan adanya grafik ini, organisasi dapat membantu dalam mengambil keputusan untuk penjualan product subcategory dari tiap region""")
 
     # DISTRIBUTION
-    st.header("Employees Age Distribution")
+    st.header("Employees Age Distribution🧑")
 
     dimemployee_query = 'SELECT EmployeeKey, BirthDate FROM dimemployee'
     dimemployee = fetch_data(dimemployee_query)
@@ -154,18 +167,22 @@ if page == 'ADVENTURE WORKS':
         labels = ['20-29', '30-39', '40-49', '50-59', '60-69']
         dimemployee['AgeGroup'] = pd.cut(dimemployee['Age'], bins=bins, labels=labels, right=False)
 
-        # Menghitung jumlah karyawan di setiap kelompok umur
-        age_group_counts = dimemployee['AgeGroup'].value_counts().reset_index()
+         # Menghitung jumlah karyawan di setiap kelompok umur
+        age_group_counts = dimemployee['AgeGroup'].value_counts().sort_index().reset_index()
         age_group_counts.columns = ['AgeGroup', 'Count']
         
-        # Membuat pie chart menggunakan Plotly
-        fig = px.pie(age_group_counts, names='AgeGroup', values='Count', title='Distribution of Employee Ages')
-    
-        # Menampilkan pie chart di Streamlit
+        # Membuat bar chart 
+        fig = px.bar(age_group_counts, x='AgeGroup', y='Count', 
+                     title='Distribution of Employee Ages',
+                     labels={'AgeGroup': 'Range of Age', 'Count': 'Amounts'},
+                     color='AgeGroup', color_discrete_sequence=px.colors.qualitative.Set3)
+
+        # Menampilkan bar chart di Streamlit
         st.plotly_chart(fig, use_container_width=True)
+        st.write("""Grafik Barchart ini menampilkan distribusi usia karyawan. Dimana sumbu X menunjukkan Rentang Usia Karyawan dan sumbu Y menunjukkan Jumlah dari tiap Rentang Usia Karyawan""")
 
 elif page == 'IMDB TOP 50 MOVIES':
-    st.title("IMDB TOP 50 MOVIES")
+    st.title("IMDB TOP 50 MOVIES🎥")
 
     # Mengubah tipe data string menjadi float di kolom budget
     data2['Budget'] = pd.to_numeric(data2['Budget'].str.replace('$', '').str.replace(',', ''), errors='coerce')
@@ -177,14 +194,14 @@ elif page == 'IMDB TOP 50 MOVIES':
     data2['Gross worldwide'] = pd.to_numeric(data2['Gross worldwide'].str.replace('$', '').str.replace(',', ''), errors='coerce')
 
     #COMPARISON
-    st.header("Gross US & Canada by Year")
+    st.header("Gross Worldwide by Year💸")
     # Mengubah kolom 'Opening_Week_Date' ke datetime
     data2['Opening_Week_Date'] = pd.to_datetime(data2['Opening_Week_Date'])
     # Membuat dropdown
     year_ranges = ['1970-1980', '1981-2000', '2001-2010', '2011-2020', '2021-2024']
     selected_year_range = st.selectbox('Select Movie Year Range', year_ranges)
 
-    # Filter the data based on the selected year range
+    # Filtering data berdasarakan tahun
     if selected_year_range == '1970-1980':
         df_plot = data2[(data2['Opening_Week_Date'].dt.year >= 1970) & (data2['Opening_Week_Date'].dt.year <= 2000)]
     elif selected_year_range == '1981-2000':
@@ -197,14 +214,17 @@ elif page == 'IMDB TOP 50 MOVIES':
         df_plot = data2[(data2['Opening_Week_Date'].dt.year >= 2021) & (data2['Opening_Week_Date'].dt.year <= 2024)]
 
     # Mengurutkan data dari yang tertinggi-terendah
-    df_plot = df_plot.sort_values(by='Gross US & Canada', ascending=False)
+    df_plot = df_plot.sort_values(by='Gross worldwide', ascending=False)
 
     # Membuat barchart
-    fig = px.bar(df_plot, x='Title', y='Gross US & Canada', color='Title', color_discrete_sequence=px.colors.sequential.Plotly3, title='Gross US & Canada by Year')
+    fig = px.bar(df_plot, x='Title', y='Gross worldwide', color='Title', color_discrete_sequence=px.colors.sequential.Plotly3, title='Gross Worldwide by Year')
     st.plotly_chart(fig, use_container_width=True)
+    st.write("""Grafik Barchart ini menampilkan Gross Worldwide dari 50 film teratas. Sumbu X menunjukkan Judul Film dan sumbu Y menunjukkan Gross Worldwide.
+             Grafik ini dapat di filter berdasarkan tahun rilis film. Dengan adanya grafik ini, dapat membantu dalam mengetahui pendapatan kotor dari tiap film sesuai
+             dengan rentang waktu rilisnya""")
 
     # DISTRIBUTION
-    st.header("Distribution of Aspect Ratio")
+    st.header("Distribution of Aspect Ratio🎞️")
     # Menghitung jumlah setiap aspek rasio
     aspect_ratio_counts = data2['Aspect ratio'].value_counts().reset_index()
     aspect_ratio_counts.columns = ['Aspect ratio', 'Frequency']
@@ -214,23 +234,28 @@ elif page == 'IMDB TOP 50 MOVIES':
         y=alt.Y('Frequency', title='Frequency'),
         color=alt.Color('Aspect ratio', legend=None)  # Menambahkan warna untuk setiap bar berdasarkan aspek rasio
     ).properties(
-        title='Distribution of Aspect Ratio',
         width=800
     )
     # Menampilkan bar chart di Streamlit
     st.altair_chart(bar_chart, use_container_width=True)
+    st.write("""Grafik Barchart ini menampilkan distribusi penggunaan Aspek Ratio dalam film. Grafik ini dapat membantu dalam mengetahui
+             aspek rasio apa yang paling umum digunakan dalam sebuah film""")
 
     #RELATIONSHIP
-    st.header("Relationship between Budget and Gross Worldwide")
-    fig = px.scatter(data2, x='Budget', y='Gross worldwide', title='Budget vs Runtime')
+    st.header("Relationship between Budget and Gross Worldwide🪙")
+    fig = px.scatter(data2, x='Budget', y='Gross worldwide')
     st.plotly_chart(fig, use_container_width=True)
+    st.write("""Grafik Scatter Plot ini menampilkan relasi atau hubungan antara Budget dan Runtime. Dengan adanya grafik ini, dapat membantu dalam
+             mengetahui apakah budget pembuatan film mempengaruhi durasi dari sebuah film""")
 
     # COMPOSITION
-    st.header("Composition of Color")
+    st.header("Composition of Color🎨")
     # Menghitung jumlah setiap warna
     color_counts = data2['Color'].value_counts().reset_index()
     color_counts.columns = ['Color', 'Frequency']
     # Membuat pie chart menggunakan Plotly
-    fig = px.pie(color_counts, names='Color', values='Frequency', title='Composition of Color')
+    fig = px.pie(color_counts, names='Color', values='Frequency')
     # Menampilkan pie chart di Streamlit
     st.plotly_chart(fig, use_container_width=True)
+    st.write("""Grafik Pie Chart ini menampilkan komposisi dari penggunaan warna pada sebuah film. Dari grafik ini, dapat membantu kita 
+             dalam mengetahui warna apa yang paling umum atau general dalam membuat sebuah film""")
