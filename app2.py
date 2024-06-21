@@ -8,11 +8,11 @@ import plotly.express as px
 from datetime import datetime
 
 # create connection ke db
-conn = st.connection("db", type="sql", autocommit=True)
+create_conn = st.connection("mydb", type="sql", autocommit=True)
 
 # Fungsi untuk menjalankan query dan mendapatkan data
 def fetch_data(query):
-    connection = conn()
+    connection = create_conn()
     if connection is None:
         return None
     try:
