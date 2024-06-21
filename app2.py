@@ -8,29 +8,11 @@ import plotly.express as px
 from datetime import datetime
 
 # create connection ke db
-def create_connection():
-    host = "kubela.id"
-    port = 3306
-    user = "davis2024irwan"
-    password = "wh451n9m@ch1n3"
-    database = "aw"
-    
-    try:
-        connection = pymysql.connect(
-            host=host,
-            port=port,
-            user=user,
-            password=password,
-            database=database
-        )
-        return connection
-    except Exception as e:
-        st.error(f"Error connecting to database: {e}")
-        return None
+connection = st.connection("mydb", type="sql", autocommit=True)
 
 # Fungsi untuk menjalankan query dan mendapatkan data
 def fetch_data(query):
-    connection = create_connection()
+    connection = connection()
     if connection is None:
         return None
     try:
@@ -43,7 +25,7 @@ def fetch_data(query):
         connection.close()
 
 # membaca file csv
-file_path = 'imdb_top250_50movies.csv'
+file_path = 'C:/Users/USER/Documents/COLLage/Assignment/DATA VISUAL/FP/imdb_top250_50movies.csv'
 data2 = pd.read_csv(file_path)
 
 page = st.sidebar.selectbox('Select Page', ['ADVENTURE WORKS', 'IMDB TOP 50 MOVIES'])
