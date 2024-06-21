@@ -5,31 +5,32 @@ import seaborn as sns
 import altair as alt
 import pymysql
 import sqlalchemy
-from sqlalchemy.engine import URL
 import plotly.express as px
 from datetime import datetime
 
 # create connection ke db
-def create_connection():
+def create_conn():
+    host = "kubela.id"
+    port = 3306
+    user = "davis2024irwan"
+    password = "wh451n9m@ch1n3"
+    database = "aw"
+    
     try:
-        conn_info = st.secrets["connections"]["mydb"]
-        url_object = URL.create(
-            drivername=f"{conn_info['dialect']}+{conn_info['driver']}",
-            username=conn_info["username"],
-            password=conn_info["password"],
-            host=conn_info["host"],
-            port=conn_info["port"],
-            database=conn_info["database"]
+        connection = pymysql.connect(
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            database=database
         )
-        engine = sqlalchemy.create_engine(url_object)
-        return engine.connect()
+        return connection
     except Exception as e:
-        st.error(f"Error creating connection: {e}")
+        st.error(f"Error connecting to database: {e}")
         return None
-
-# Fungsi untuk menjalankan query dan mendapatkan data
+        
 def fetch_data(query):
-    connection = create_connection()
+    connection = create_conn()
     if connection is None:
         return None
     try:
@@ -39,8 +40,8 @@ def fetch_data(query):
         st.error(f"Error executing query: {e}")
         return None
     finally:
-        if connection:
-            connection.close()
+        connection.close()
+        
 # membaca file csv
 file_path = 'imdb_top250_50movies.csv'
 data2 = pd.read_csv(file_path)
