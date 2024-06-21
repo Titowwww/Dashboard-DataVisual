@@ -10,23 +10,26 @@ from datetime import datetime
 
 # create connection ke db
 def create_conn():
-        try:
-            connection = pymysql.connect(
-                host=st.secrets["connections"]["mydb"]["host"],
-                port=st.secrets["connections"]["mydb"]["port"],
-                user=st.secrets["connections"]["mydb"]["user"],
-                password=st.secrets["connections"]["mydb"]["password"],
-                database=st.secrets["connections"]["mydb"]["database"]
-            )
-            return connection
-        except Exception as e:
-            st.error(f"Error connecting to database: {e}")
-            return None
-    # Contoh connect
-    connection = create_conn()
-    if connection:
-        st.success("Connected!")
+    host = "kubela.id"
+    port = 3306
+    user = "davis2024irwan"
+    password = "wh451n9m@ch1n3"
+    database = "aw"
+    
+    try:
+        connection = pymysql.connect(
+            host=host,
+            port=port,
+            user=user,
+            password=password,
+            database=database
+        )
+        return connection
+    except Exception as e:
+        st.error(f"Error connecting to database: {e}")
+        return None
 
+# Fungsi untuk menjalankan query dan mendapatkan data
 def fetch_data(query):
     connection = create_conn()
     if connection is None:
