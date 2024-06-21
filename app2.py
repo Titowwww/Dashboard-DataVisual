@@ -4,6 +4,7 @@ import streamlit as st
 import seaborn as sns
 import altair as alt
 import pymysql
+import sqlalchemy
 import plotly.express as px
 from datetime import datetime
 
