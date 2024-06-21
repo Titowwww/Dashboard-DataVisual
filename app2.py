@@ -9,7 +9,7 @@ import plotly.express as px
 from datetime import datetime
 
 # create connection ke db
- def create_conn():
+def create_conn():
         try:
             connection = pymysql.connect(
                 host=st.secrets["connections"]["mydb"]["host"],
@@ -26,7 +26,7 @@ from datetime import datetime
     connection = create_conn()
     if connection:
         st.success("Connected!")
-        
+
 def fetch_data(query):
     connection = create_conn()
     if connection is None:
