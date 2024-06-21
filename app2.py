@@ -8,11 +8,15 @@ import plotly.express as px
 from datetime import datetime
 
 # create connection ke db
-create_conn = st.connection("mydb", type="sql", autocommit=True)
+def create_connection():
+    conn_info = st.secrets["connections"]["mydb"]
+    connection_string = f"{conn_info['dialect']}+{conn_info['driver']}://{conn_info['username']}:{conn_info['password']}@{conn_info['host']}:{conn_info['port']}/{conn_info['database']}"
+    engine = sqlalchemy.create_engine(connection_string)
+    return engine.connect()
 
 # Fungsi untuk menjalankan query dan mendapatkan data
 def fetch_data(query):
-    connection = create_conn()
+    connection = create_connection()
     if connection is None:
         return None
     try:
