@@ -22,7 +22,7 @@ from datetime import datetime
         except Exception as e:
             st.error(f"Error connecting to database: {e}")
             return None
-    # Contoh konek
+    # Contoh connect
     connection = create_conn()
     if connection:
         st.success("Connected!")
